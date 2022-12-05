@@ -52,3 +52,17 @@ apt-get install zstd
 
 ![output-1](https://github.com/shreyahunur/linux/blob/master/cmpe283/Assignment-2/outputs/part1_output.PNG)
 ![output-1](https://github.com/shreyahunur/linux/blob/master/cmpe283/Assignment-2/outputs/part2_output.PNG)
+
+## Some reference weblinks useful for setup and debugging
+1. How to add sudo users in Debian?
+
+https://www.cloudpanel.io/tutorial/how-to-add-user-to-sudoers-in-debian/
+
+
+2 . Installation of Vim on Debian for writing test script
+
+https://vitux.com/how-to-install-vim-editor-on-debian/
+
+3. Installing KVM on Ubuntu
+
+https://phoenixnap.com/kb/ubuntu-install-kvm#ftoc-heading-5
