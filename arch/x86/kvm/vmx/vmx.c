@@ -6280,15 +6280,22 @@ void dump_vmcs(struct kvm_vcpu *vcpu)
  * The guest has exited.  See if we can fix it or if we need userspace
  * assistance.
  */
-u32 total_exits;
+ 
+extern atomic_t numberOfExits;
+extern atomic64_t timeDuration;
+
 static int __vmx_handle_exit(struct kvm_vcpu *vcpu, fastpath_t exit_fastpath)
-{
+{	
+	uint64_t beginTime= rdtsc();
+	uint64_t endTime ;
 	struct vcpu_vmx *vmx = to_vmx(vcpu);
 	union vmx_exit_reason exit_reason = vmx->exit_reason;
 	u32 vectoring_info = vmx->idt_vectoring_info;
 	u16 exit_handler_index;
+	arch_atomic_inc(&numberOfExits);
 	
-	total_exits++;//atomic operation
+
+	
 	/*
 	 * Flush logged GPAs PML buffer, this will make dirty_bitmap more
 	 * updated. Another good is, in kvm_vm_ioctl_get_dirty_log, before
@@ -6306,8 +6313,20 @@ static int __vmx_handle_exit(struct kvm_vcpu *vcpu, fastpath_t exit_fastpath)
 	 * invalid guest state should never happen as that means KVM knowingly
 	 * allowed a nested VM-Enter with an invalid vmcs12.  More below.
 	 */
+		
 	if (KVM_BUG_ON(vmx->nested.nested_run_pending, vcpu->kvm))
+	{
+		endTime = rdtsc();
+                atomic64_fetch_add(endTime - beginTime, &timeDuration);
 		return -EIO;
+	}
+	
+	if (vmx->emulation_required)
+	{
+		endTime = rdtsc();
+                atomic64_fetch_add(endTime - beginTime, &timeDuration);
+		return handle_invalid_guest_state(vcpu);
+	}
 
 	if (is_guest_mode(vcpu)) {
 		/*
@@ -6329,6 +6348,13 @@ static int __vmx_handle_exit(struct kvm_vcpu *vcpu, fastpath_t exit_fastpath)
 		 * getting out of sync with dirty tracking.
 		 */
 		nested_mark_vmcs12_pages_dirty(vcpu);
+		
+		if (nested_vmx_reflect_vmexit(vcpu))
+		{
+			endTime = rdtsc();
+			atomic64_fetch_add(endTime - beginTime, &timeDuration);
+			return 1;
+		}
 
 		/*
 		 * Synthesize a triple fault if L2 state is invalid.  In normal
@@ -6341,13 +6367,13 @@ static int __vmx_handle_exit(struct kvm_vcpu *vcpu, fastpath_t exit_fastpath)
 		 * the least awful solution for the userspace case without
 		 * risking false positives.
 		 */
+		 
 		if (vmx->emulation_required) {
 			nested_vmx_vmexit(vcpu, EXIT_REASON_TRIPLE_FAULT, 0, 0);
 			return 1;
 		}
 
-		if (nested_vmx_reflect_vmexit(vcpu))
-			return 1;
+
 	}
 
 	/* If guest state is invalid, start emulating.  L2 is handled above. */
@@ -6360,6 +6386,8 @@ static int __vmx_handle_exit(struct kvm_vcpu *vcpu, fastpath_t exit_fastpath)
 		vcpu->run->fail_entry.hardware_entry_failure_reason
 			= exit_reason.full;
 		vcpu->run->fail_entry.cpu = vcpu->arch.last_vmentry_cpu;
+		endTime = rdtsc();
+                atomic64_fetch_add(endTime - beginTime, &timeDuration);
 		return 0;
 	}
 
@@ -6369,6 +6397,8 @@ static int __vmx_handle_exit(struct kvm_vcpu *vcpu, fastpath_t exit_fastpath)
 		vcpu->run->fail_entry.hardware_entry_failure_reason
 			= vmcs_read32(VM_INSTRUCTION_ERROR);
 		vcpu->run->fail_entry.cpu = vcpu->arch.last_vmentry_cpu;
+		endTime = rdtsc();
+                atomic64_fetch_add(endTime - beginTime, &timeDuration);
 		return 0;
 	}
 
@@ -6399,6 +6429,8 @@ static int __vmx_handle_exit(struct kvm_vcpu *vcpu, fastpath_t exit_fastpath)
 		}
 		vcpu->run->internal.data[ndata++] = vcpu->arch.last_vmentry_cpu;
 		vcpu->run->internal.ndata = ndata;
+		endTime = rdtsc();
+                atomic64_fetch_add(endTime - beginTime, &timeDuration);
 		return 0;
 	}
 
@@ -6422,30 +6454,60 @@ static int __vmx_handle_exit(struct kvm_vcpu *vcpu, fastpath_t exit_fastpath)
 	}
 
 	if (exit_fastpath != EXIT_FASTPATH_NONE)
+	{
+		endTime = rdtsc();
+                atomic64_fetch_add(endTime - beginTime, &timeDuration);
 		return 1;
+	}
 
 	if (exit_reason.basic >= kvm_vmx_max_exit_handlers)
 		goto unexpected_vmexit;
 #ifdef CONFIG_RETPOLINE
 	if (exit_reason.basic == EXIT_REASON_MSR_WRITE)
+	{
+		endTime = rdtsc();
+                atomic64_fetch_add(endTime - beginTime, &timeDuration);
 		return kvm_emulate_wrmsr(vcpu);
+	}
 	else if (exit_reason.basic == EXIT_REASON_PREEMPTION_TIMER)
+	{
+		endTime = rdtsc();
+                atomic64_fetch_add(endTime - beginTime, &timeDuration);
 		return handle_preemption_timer(vcpu);
+	}
 	else if (exit_reason.basic == EXIT_REASON_INTERRUPT_WINDOW)
+	{
+		endTime = rdtsc();
+                atomic64_fetch_add(endTime - beginTime, &timeDuration);
 		return handle_interrupt_window(vcpu);
+	}
 	else if (exit_reason.basic == EXIT_REASON_EXTERNAL_INTERRUPT)
+	{
+		endTime = rdtsc();
+                atomic64_fetch_add(endTime - beginTime, &timeDuration);
 		return handle_external_interrupt(vcpu);
+	}
 	else if (exit_reason.basic == EXIT_REASON_HLT)
+	{
+		endTime = rdtsc();
+                atomic64_fetch_add(endTime - beginTime, &timeDuration);
 		return kvm_emulate_halt(vcpu);
+	}
 	else if (exit_reason.basic == EXIT_REASON_EPT_MISCONFIG)
+	{
+		endTime = rdtsc();
+                atomic64_fetch_add(endTime - beginTime, &timeDuration);
 		return handle_ept_misconfig(vcpu);
+	}
 #endif
 
 	exit_handler_index = array_index_nospec((u16)exit_reason.basic,
 						kvm_vmx_max_exit_handlers);
 	if (!kvm_vmx_exit_handlers[exit_handler_index])
 		goto unexpected_vmexit;
-
+		
+	endTime = rdtsc();
+        atomic64_fetch_add(endTime - beginTime, &timeDuration);
 	return kvm_vmx_exit_handlers[exit_handler_index](vcpu);
 
 unexpected_vmexit:
@@ -6458,6 +6520,8 @@ unexpected_vmexit:
 	vcpu->run->internal.ndata = 2;
 	vcpu->run->internal.data[0] = exit_reason.full;
 	vcpu->run->internal.data[1] = vcpu->arch.last_vmentry_cpu;
+	endTime = rdtsc();
+        atomic64_fetch_add(endTime - beginTime, &timeDuration);
 	return 0;
 }
 

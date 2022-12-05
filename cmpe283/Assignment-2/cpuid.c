@@ -1517,6 +1517,7 @@ int kvm_emulate_cpuid(struct kvm_vcpu *vcpu)
 	else if (eax == 0x4ffffffd){
 		ebx = (atomic64_read(&timeDuration) >> 32);
 		ecx = (atomic64_read(&timeDuration));
+		printk(KERN_INFO "The higher 32 bits of EBX %u",ebx);
 		printk(KERN_INFO "The lower 32 bits of ECX %u",ecx);
 	}
 	else{
