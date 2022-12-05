@@ -45,12 +45,15 @@ sudo apt install dwarves
 #Install
 apt-get install zstd
 ```
-
-##Output screenshots for assignment-2 
-
 ### Output Screenshots
 
+Part 1 - For CPUID leaf node %eax=0x4FFFFFFC:Return the total number of exits (all types) in %eax
 ![output-1](https://github.com/shreyahunur/linux/blob/master/cmpe283/Assignment-2/outputs/part1_output.PNG)
+
+Part 2 - For CPUID leaf node %eax=0x4FFFFFFD:
+Return the high 32 bits of the total time spent processing all exits in %ebx
+Return the low 32 bits of the total time spent processing all exits in %ecx
+%ebx and %ecx return values are measured in processor cycles, across all VCPUs
 ![output-1](https://github.com/shreyahunur/linux/blob/master/cmpe283/Assignment-2/outputs/part2_output.PNG)
 
 ## Some reference weblinks useful for setup and debugging
