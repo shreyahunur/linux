@@ -21,11 +21,34 @@ We had to go through the installation process a number of times. Our final debia
 and 20GB of disk space with debian 11.5.0 OS on it.
 
 ## Functions performed
+``` bash
+
 Installed multiple libraries using following commands:
-1. Install ncurses by running sudo apt install libncurses-dev
-2. Install flex by running sudo apt install flex
-3. Install bison by running sudo apt-get install bison
-4. Install sudo apt-get install libssl-dev
-5. Install sudo apt install libelf-dev
-6. Install sudo apt install dwarves
-7. Install apt-get install zstd
+#Install ncurses by running 
+sudo apt install libncurses-dev
+
+#Install flex by running 
+sudo apt install flex
+
+#Install bison by running 
+sudo apt-get install bison
+
+#Install 
+sudo apt-get install libssl-dev
+
+#Install 
+sudo apt install libelf-dev
+
+#Install 
+sudo apt install dwarves
+
+#Install
+apt-get install zstd
+```
+
+##Output screenshots for assignment-2 
+
+### Output Screenshots
+
+![output-1](https://github.com/shreyahunur/linux/blob/master/cmpe283/Assignment-2/outputs/part1_output.PNG)
+![output-1](https://github.com/shreyahunur/linux/blob/master/cmpe283/Assignment-2/outputs/part2_output.PNG)
