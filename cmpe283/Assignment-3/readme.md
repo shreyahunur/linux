@@ -9,7 +9,7 @@ Team members:
 We performed the experiment in a group on Shreya's machine.
 
 #### Pranika's Contribution
-I worked with Shreya to edit the code forked from the torvalds/linux. We met and discussed a solution to make changes to cpuid.c and vmx.c. I made changes for leaf node (0x4ffffffd),  returning the high 32 bits of the total time spent processing all exits in %ebx and return the low 32 bits of the total time spent processing all exits in %ecx. I had to run the make a few times to debug the errors in the make and receive the output for our \test.c file. We had to run make command in sudo mode because permission errors were popping up. I unmounted the /tmp folder and increased the /tmp space to 5GB. After performing the updated in cpuid.c and vmx.c. I created the user for Debian and added it to the sudo group before running the test file.
+I worked with Shreya to edit the code forked from the torvalds/linux. We met and discussed a solution to make changes to cpuid.c and vmx.c. I made changes for leaf node (0x4ffffffe). I had to run the make a few times to debug the errors in the make and receive the output for our \test3.c file. We had to run make command in sudo mode because permission errors were popping up. 
 
 #### Shreya's Contribution
 I worked with Pranika to modified the vmx.c file and cupid.c file for the CPUID leaf node %eax=0x4FFFFFFF
