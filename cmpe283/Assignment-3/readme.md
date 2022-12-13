@@ -79,8 +79,14 @@ The most frequent exit types -
 |Exit Number     |  Exit Description | 
 |---------|------------------|
 |0 |  Flask App |
-|7|  Flask App |
+|3|  Flask App |
+|8|  Flask App |
 
 The least frequent exit types - 
+
+|Exit Number     |  Exit Description | 
+|---------|------------------|
+|11 |  Flask App |
+|12|  Flask App |
 
 
