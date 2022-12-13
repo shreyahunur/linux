@@ -67,3 +67,9 @@ boot entail?
 
 2. Of the exit types defined in the SDM, which are the most frequent? Least?
 
+The most frequent exit types -
+
+
+The least frequent exit types - 
+
+
