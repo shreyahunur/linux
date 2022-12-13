@@ -12,10 +12,7 @@ We performed the experiment in a group on Shreya's machine.
 I worked with Shreya to edit the code forked from the torvalds/linux. We met and discussed a solution to make changes to cpuid.c and vmx.c. I made changes for leaf node (0x4ffffffe). I had to run the make a few times to debug the errors in the make and receive the output for our \test3.c file. We had to run make command in sudo mode because permission errors were popping up. 
 
 #### Shreya's Contribution
-I worked with Pranika to modified the vmx.c file and cupid.c file for the CPUID leaf node %eax=0x4FFFFFFF
-I also tested the changes made in the nested VM.
-
-
+I worked with Pranika to modify the vmx.c file and cupid.c file for the CPUID leaf node %eax=0x4FFFFFFF. I also tested the changes made in the nested VM.
 
 #### Steps to reproduce
 ``` bash
