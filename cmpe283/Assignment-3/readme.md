@@ -53,7 +53,18 @@ Reference: https://phoenixnap.com/kb/ubuntu-install-kvm
 
 Part 3 - For CPUID leaf node %eax=0x4FFFFFFE: Return the number of exits for the exit number provided (on input) in %ecx. This value should be returned in %eax 
 
+<img width="950" alt="op3-1" src="https://user-images.githubusercontent.com/64269342/207231637-8a512839-5792-449b-aade-213a170933e3.png">
+
+<img width="952" alt="op3-2" src="https://user-images.githubusercontent.com/64269342/207231668-d4db6255-f9c7-42d5-bd3a-b107c9cfe274.png">
+
+
 Part 4 - For CPUID leaf node %eax=0x4FFFFFFF: Return the time spent processing the exit number provided (on input) in %ecx. Return the high 32 bits of the total time spent for that exit in %ebx. Return the low 32 bits of the total time spent for that exit in %ecx
+
+<img width="960" alt="op4-1" src="https://user-images.githubusercontent.com/64269342/207231372-b94df64b-d719-4fb6-a8ff-f1a058469bf4.PNG">
+
+<img width="960" alt="op4-2" src="https://user-images.githubusercontent.com/64269342/207231388-688657dc-9739-4cf4-8ff7-9fa10484caae.PNG">
+
+<img width="960" alt="op4-3" src="https://user-images.githubusercontent.com/64269342/207231408-983f4817-4343-4a5e-aa60-aae9d94e26c8.PNG">
 
 #### Questions 
 
