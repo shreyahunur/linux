@@ -69,7 +69,7 @@ Part 4 - For CPUID leaf node %eax=0x4FFFFFFF: Return the time spent processing t
 more exits performed during certain VM operations? Approximately how many exits does a full VM 
 boot entail?
 
-The frequency of the exits increased exponentially after full reboot. Initially, it was 2500 exits before reboot the exits increased exponentially.
+The frequency of the exits increased exponentially after full reboot. Initially, it was 2500 exits before reboot the exits increased exponentially as shown in the output images above.
 
 2. Of the exit types defined in the SDM, which are the most frequent? Least?
 
