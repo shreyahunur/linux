@@ -69,6 +69,10 @@ boot entail?
 
 The most frequent exit types -
 
+|Exit Number     |  Exit Description | 
+|---------|------------------|
+|0 |  Flask App |
+|7|  Flask App |
 
 The least frequent exit types - 
 
