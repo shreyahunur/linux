@@ -6283,6 +6283,8 @@ void dump_vmcs(struct kvm_vcpu *vcpu)
  
 extern atomic_t numberOfExits;
 extern atomic64_t timeDuration;
+// Array for 69 values as the Intel SDM has 69 exit reasons defined.
+extern atomic_t exitPerDef[69];
 
 static int __vmx_handle_exit(struct kvm_vcpu *vcpu, fastpath_t exit_fastpath)
 {	
@@ -6508,6 +6510,8 @@ static int __vmx_handle_exit(struct kvm_vcpu *vcpu, fastpath_t exit_fastpath)
 		
 	endTime = rdtsc();
         atomic64_fetch_add(endTime - beginTime, &timeDuration);
+        //assignment-3
+        atomic_inc(&exitPerDef[(int)exit_handler_index]);
 	return kvm_vmx_exit_handlers[exit_handler_index](vcpu);
 
 unexpected_vmexit:
@@ -6521,6 +6525,7 @@ unexpected_vmexit:
 	vcpu->run->internal.data[0] = exit_reason.full;
 	vcpu->run->internal.data[1] = vcpu->arch.last_vmentry_cpu;
 	endTime = rdtsc();
+	
         atomic64_fetch_add(endTime - beginTime, &timeDuration);
 	return 0;
 }

@@ -1499,6 +1499,9 @@ EXPORT_SYMBOL(numberOfExits);
 atomic64_t timeDuration = ATOMIC_INIT(0);
 EXPORT_SYMBOL(timeDuration);
 
+atomic_t exitPerDef[69];
+EXPORT_SYMBOL(exitPerDef);
+
 int kvm_emulate_cpuid(struct kvm_vcpu *vcpu)
 {
 	u32 eax, ebx, ecx, edx;
@@ -1508,17 +1511,67 @@ int kvm_emulate_cpuid(struct kvm_vcpu *vcpu)
 
 	eax = kvm_rax_read(vcpu);
 	ecx = kvm_rcx_read(vcpu);
-	printk(KERN_INFO "Before IF statement");
+	//printk(KERN_INFO "Before IF statement");
 	if (eax == 0x4ffffffc){
-		printk(KERN_INFO "In IF block");
+		//printk(KERN_INFO "In IF block");
 		eax = arch_atomic_read(&numberOfExits);
 		printk(KERN_INFO "Number of exits:%u",eax);
 		}
 	else if (eax == 0x4ffffffd){
 		ebx = (atomic64_read(&timeDuration) >> 32);
 		ecx = (atomic64_read(&timeDuration));
-		printk(KERN_INFO "The higher 32 bits of EBX %u",ebx);
-		printk(KERN_INFO "The lower 32 bits of ECX %u",ecx);
+		printk(KERN_INFO "The higher 32 bits of EBX %u \n",ebx);
+		printk(KERN_INFO "The lower 32 bits of ECX %u \n",ecx);
+	}
+	else if (eax == 0x4ffffffe){
+		
+		//According to the Intel SDM Vol 3 Appendix Table C-1 Basic Exit reasons these are the exit reasons NOT DEFINED in the SDM
+		 if( ecx !=35 && ecx !=38 && ecx !=42 && ecx <0 && ecx >69){
+            		//Exit reasons not enabled SDM
+                   if(ecx!=3 && ecx!=4 && ecx!=5 && ecx!=6 && ecx!=11 && ecx!=34 && ecx!=33 && ecx!=51 && ecx!=59 && ecx!=61 && ecx!=60){
+                    
+                   eax= 0x00000000;
+                   ebx= 0x00000000;
+                   ecx= 0x00000000;
+                   edx= 0x00000000; 
+                 
+                  } else {
+                    eax = atomic_read(&exitPerDef[(int)ecx]);
+                    }
+	}
+	else {
+	
+	eax = ebx = ecx = 0x00000000;
+	edx = 0xffffffff;
+	}
+	}
+	
+	else if(eax == 0x4fffffff)
+	{
+		//According to the Intel SDM Vol 3 Appendix Table C-1 Basic Exit reasons these are the exit reasons NOT DEFINED in the SDM
+		 if( ecx !=35 && ecx !=38 && ecx !=42 && ecx <0 && ecx >69){
+            		//Exit reasons not enabled SDM
+                   if(ecx!=3 && ecx!=4 && ecx!=5 && ecx!=6 && ecx!=11 && ecx!=34 && ecx!=33 && ecx!=51 && ecx!= 59 && ecx!=61 && ecx!=60){
+                    //setting values to zero
+                   eax= 0x00000000;
+                   ebx= 0x00000000;
+                   ecx= 0x00000000;
+                   edx= 0x00000000; 
+                 
+                  } else {
+                       printk(KERN_INFO "CPUID(0x4fffffff), exits number=%u",ecx);
+			ebx = (atomic64_read(&timeDuration) >>32);
+			printk(KERN_INFO "Higher 32-bits-EBX %u \n",ebx);
+			ecx = (atomic64_read (&timeDuration));
+			printk(KERN_INFO "Lower 32-bits-ECX %u \n",ecx);
+			edx = 0;
+                    }
+                    }
+
+		else{
+			eax = ebx = ecx = 0x00000000;
+	               edx = 0xffffffff;
+		}
 	}
 	else{
 		kvm_cpuid(vcpu, &eax, &ebx, &ecx, &edx, false);
