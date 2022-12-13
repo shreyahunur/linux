@@ -72,21 +72,24 @@ Part 4 - For CPUID leaf node %eax=0x4FFFFFFF: Return the time spent processing t
 more exits performed during certain VM operations? Approximately how many exits does a full VM 
 boot entail?
 
+The frequency of the exits increased exponentially after full reboot. Initially, it was 2500 exits before reboot the exits increased exponentially.
+
 2. Of the exit types defined in the SDM, which are the most frequent? Least?
 
 The most frequent exit types -
 
 |Exit Number     |  Exit Description | 
 |---------|------------------|
-|0 |  Flask App |
-|3|  Flask App |
-|8|  Flask App |
+|0 | Exception or non-maskable interrupt (NMI). |
+|2|  Triple fault|
+|8|  NMI window. At the beginning of an instruction, there was no virtual-NMI blocking; events were not blocked by MOV
+SS; and the “NMI-window exiting” VM-execution control was 1 |
 
 The least frequent exit types - 
 
 |Exit Number     |  Exit Description | 
 |---------|------------------|
-|11 |  Flask App |
-|12|  Flask App |
+|11 | GETSEC. Guest software attempted to execute GETSEC. |
+|67|  UMWAIT. Guest software attempted to execute UMWAIT and the “enable user wait and pause” and “RDTSC exiting” VM-execution controls were both 1. |
 
 
