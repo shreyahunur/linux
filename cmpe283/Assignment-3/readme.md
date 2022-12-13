@@ -12,33 +12,10 @@ We performed the experiment in a group on Shreya's machine.
 I worked with Shreya to edit the code forked from the torvalds/linux. We met and discussed a solution to make changes to cpuid.c and vmx.c. I made changes for leaf node (0x4ffffffd),  returning the high 32 bits of the total time spent processing all exits in %ebx and return the low 32 bits of the total time spent processing all exits in %ecx. I had to run the make a few times to debug the errors in the make and receive the output for our \test.c file. We had to run make command in sudo mode because permission errors were popping up. I unmounted the /tmp folder and increased the /tmp space to 5GB. After performing the updated in cpuid.c and vmx.c. I created the user for Debian and added it to the sudo group before running the test file.
 
 #### Shreya's Contribution
+I worked with Pranika to modified the vmx.c file and cupid.c file for the CPUID leaf node %eax=0x4FFFFFFF
+I also tested the changes made in the nested VM.
 
 
-## Functions performed
-``` bash
-
-Installed multiple libraries using following commands:
-#Install ncurses by running 
-sudo apt install libncurses-dev
-
-#Install flex by running 
-sudo apt install flex
-
-#Install bison by running 
-sudo apt-get install bison
-
-#Install 
-sudo apt-get install libssl-dev
-
-#Install 
-sudo apt install libelf-dev
-
-#Install 
-sudo apt install dwarves
-
-#Install
-apt-get install zstd
-```
 
 #### Steps to reproduce
 ``` bash
@@ -75,26 +52,18 @@ Reference: https://phoenixnap.com/kb/ubuntu-install-kvm
 ### Output Screenshots
 
 Part 3 - For CPUID leaf node %eax=0x4FFFFFFC:Return the total number of exits (all types) in %eax
-![output-1](https://github.com/shreyahunur/linux/blob/master/cmpe283/Assignment-2/outputs/part1_output.PNG)
+
 
 Part 4 - For CPUID leaf node %eax=0x4FFFFFFD:
 Return the high 32 bits of the total time spent processing all exits in %ebx
 Return the low 32 bits of the total time spent processing all exits in %ecx
 %ebx and %ecx return values are measured in processor cycles, across all VCPUs
-![output-1](https://github.com/shreyahunur/linux/blob/master/cmpe283/Assignment-2/outputs/part2_output.PNG)
 
-## Some reference weblinks useful for setup and debugging
-1. How to add sudo users in Debian?
+#### Questions 
 
-https://www.cloudpanel.io/tutorial/how-to-add-user-to-sudoers-in-debian/
+1. Comment on the frequency of exits – does the number of exits increase at a stable rate? Or are there 
+more exits performed during certain VM operations? Approximately how many exits does a full VM 
+boot entail?
 
+2. Of the exit types defined in the SDM, which are the most frequent? Least?
 
-2 . Installation of Vim on Debian for writing test script
-
-https://vitux.com/how-to-install-vim-editor-on-debian/
-
-3. Installing KVM on Ubuntu
-
-https://phoenixnap.com/kb/ubuntu-install-kvm#ftoc-heading-5
-
-4. Intel SDM to find not defined exits
