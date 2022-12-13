@@ -51,13 +51,9 @@ Reference: https://phoenixnap.com/kb/ubuntu-install-kvm
 
 ### Output Screenshots
 
-Part 3 - For CPUID leaf node %eax=0x4FFFFFFC:Return the total number of exits (all types) in %eax
+Part 3 - For CPUID leaf node %eax=0x4FFFFFFE: Return the number of exits for the exit number provided (on input) in %ecx. This value should be returned in %eax 
 
-
-Part 4 - For CPUID leaf node %eax=0x4FFFFFFD:
-Return the high 32 bits of the total time spent processing all exits in %ebx
-Return the low 32 bits of the total time spent processing all exits in %ecx
-%ebx and %ecx return values are measured in processor cycles, across all VCPUs
+Part 4 - For CPUID leaf node %eax=0x4FFFFFFF: Return the time spent processing the exit number provided (on input) in %ecx. Return the high 32 bits of the total time spent for that exit in %ebx. Return the low 32 bits of the total time spent for that exit in %ecx
 
 #### Questions 
 
