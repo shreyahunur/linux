@@ -82,8 +82,7 @@ The most frequent exit types -
 |---------|------------------|
 |0 | Exception or non-maskable interrupt (NMI). |
 |2|  Triple fault|
-|8|  NMI window. At the beginning of an instruction, there was no virtual-NMI blocking; events were not blocked by MOV
-SS; and the “NMI-window exiting” VM-execution control was 1 |
+|8|  NMI window. At the beginning of an instruction, there was no virtual-NMI blocking; events were not blocked by MOV SS; and the “NMI-window exiting” VM-execution control was 1 |
 
 The least frequent exit types - 
 
